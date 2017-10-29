@@ -1,5 +1,48 @@
 ### Fountain Programming Task
 
+This is a small web app built using Ruby on Rails that handles job applications.
+
+The user uploads a `.txt` file with a list of commands (see format below), and the app will return a `.txt` file withthe appropriate output.
+
+#### Usage
+
+To use this app `cd` into the root directory and run `bundle install`. When all the dependencies finish installing run `rails server` and navigate in your browser to [localhost:3000](localhost:3000).
+
+You will see a form to submit your `.txt` file. Click "Browse" to find your file, then hit "Submit".
+
+Below the form you will see a list of all the previous batches that were uploaded, click on any of them to get the output from that batch.
+
+#### Available commands
+
+The first line of the file should start with `DEFINE` and include at least one stage of the hiring process. Define the stages in the hiring process. The available stages are `ManualReview PhoneInterview BackgroundCheck DocumentSigning`. The stages can be in any order.
+
+Next list the commands, each command should be in its own line.
+
+The available commands are:
+- CREATE:
+  - COMMAND: `CREATE [EMAIL]`
+  - Create an applicant with the specified email address.
+  - Output: if the applicant with the same email exists, `Duplicate applicant`. Otherwise, `CREATE [EMAIL]`.
+- ADVANCE:
+  - COMMAND: `ADVANCE [STAGE_NAME]` or `ADVANCE`
+  - Advance the applicant to the specified stage. If `STAGE_NAME` parameter is omitted, the applicant will be advanced to the next stage.
+  - Output: if the applicant is already in [STAGE_NAME] or the last stage, `Already in [STAGE_NAME]`. Otherwise, `ADVANCE [STAGE_NAME]`.
+- DECIDE:
+  - COMMAND: `DECIDE [EMAIL] 1` or `DECIDE [EMAIL] 0`
+  - Decide if the applicant should be hired (1) or rejected (0). An applicant can be rejected (0) from any stage, but has to be in the last stage in order to be hired (1).
+  - Output: if successfully hired, `Hired [EMAIL]`. If successfully rejected, `Rejected [EMAIL]`. Otherwise, `Failed to decide for [EMAIL]`.
+- STATS:
+  - COMMAND: `STATS`
+  - Print the number of applicants for all stages, including the hired and rejected.
+  - Output: [STAGE_1] 0 [STAGE_2] 1 [STAGE_3] 1 Hired 2 Rejected 0
+
+#### Contact
+For any feedback (or to hire me ;) please contact me at [hire@yechiel.me](mailto:hire@yechiel.me)
+
+---
+
+### Fountain Programming Task
+
 #### Overview
 
 Your task is to write a simple script that simulates a hiring process. This script will read a text file `input.txt` as input where each line is a special command, and write responses to another file `output.txt`. In the following sections, we provide you with command descriptions and the expected output.
