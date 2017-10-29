@@ -2,6 +2,6 @@
 
 <ul>
     <% @batches.each do |batch| %>
-        <li>Batch No. <%= batch.id %></li>
+        <li><%= link_to "Batch No. #{batch.id}", batch_path(batch), download: "" %> Uploaded at <%= batch.created_at.strftime("%m/%d/%y  %l:%M%p") %> </li>
     <% end %>
 </ul>

@@ -11,4 +11,9 @@ class BatchesController < ApplicationController
 
     send_data @batch.output, filename: "output.txt"
   end
+
+  def show
+    @batch = Batch.find_by(id: params[:id])
+    send_data @batch.output, type: 'text/text', filename: "output.txt", disposition: 'attachment'
+  end
 end
