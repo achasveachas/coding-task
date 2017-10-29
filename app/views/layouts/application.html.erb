@@ -7,13 +7,13 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-Upload New Batch:
-<%= form_for @batch do |f| %>
-  <%= f.file_field :input %>
-  <%= f.submit "Submit Batch" %>
-<% end %>
+  Upload New Batch:
+  <%= form_for @batch do |f| %>
+    <%= f.file_field :input %><br>
+    <%= f.submit "Submit Batch" %>
+  <% end %>
 
-<%= yield %>
+  <%= yield %>
 
 </body>
 </html>
