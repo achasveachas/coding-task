@@ -16,10 +16,10 @@ ActiveRecord::Schema.define(version: 20171029004830) do
   create_table "applicants", force: :cascade do |t|
     t.string   "email"
     t.integer  "hired"
-    t.integer  "stage"
+    t.integer  "stage",      default: 0
     t.integer  "batch_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "batches", force: :cascade do |t|

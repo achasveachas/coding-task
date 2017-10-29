@@ -3,7 +3,7 @@ class CreateApplicants < ActiveRecord::Migration
     create_table :applicants do |t|
       t.string :email
       t.integer :hired
-      t.integer :stage
+      t.integer :stage, default: 0
       t.belongs_to :batch, foreign_key: true
 
       t.timestamps null: false
