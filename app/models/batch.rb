@@ -12,6 +12,7 @@ class Batch < ActiveRecord::Base
         @commands = input.split("\n")
         @stages = []
         @output = ""
+        @error = nil
 
         set_stages
         return if @stages.length == 0
@@ -29,13 +30,12 @@ class Batch < ActiveRecord::Base
                 display_stats
             else
                 return_error
-                return
             end
-
+            return if @error
         end
         self.update_attributes(output: @output)
         self.save
-        raise @output.inspect
+        # raise @output.inspect
     end
 
     private
@@ -43,6 +43,7 @@ class Batch < ActiveRecord::Base
     def return_error
         self.output = "You have submitted improper input."
         self.save
+        @error = true
     end
 
     def set_stages
@@ -65,6 +66,28 @@ class Batch < ActiveRecord::Base
         else
             applicant = self.applicants.create(email: email)
             @output += "\nCREATE #{applicant.email}"
+        end
+    end
+
+    def advance_user(email, stage = nil)
+        applicant = self.applicants.find_by(email: email)
+        return_error if !applicant
+        
+        if stage
+            index = @stages.index(stage)
+            if applicant.stage == index
+                @output += "\nAlready in #{@stages[applicant.stage]}"
+            else
+                applicant.update_attributes(stage: index)
+                @output += "\nASDVANCE #{applicant.email}"
+            end  
+        else
+            if applicant.stage >= @stages.length - 1
+                @output += "\nAlready in #{@stages[applicant.stage]}"
+            else
+                applicant.update_attributes(stage: applicant.stage + 1)
+                @output += "\nASDVANCE #{applicant.email}"
+            end
         end
     end
 end
