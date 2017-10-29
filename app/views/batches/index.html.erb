@@ -1,2 +1,7 @@
-<h1>Batches#index</h1>
-<p>Find me in app/views/batches/index.html.erb</p>
+<h1>Previous Batches</h1>
+
+<ul>
+    <% @batches.each do |batch| %>
+        <li>Batch No. <%= batch.id %></li>
+    <% end %>
+</ul>
