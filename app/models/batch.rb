@@ -100,10 +100,20 @@ class Batch < ActiveRecord::Base
             applicant.update_attributes(hired: 0)
             @output += "\nRejected #{applicant.email}"
         elsif decision == "1" && applicant.stage >= @stages.length - 1
-            applicant.update_attributes(hired: 1)
+            applicant.update_attributes(hired: 1, stage: nil)
             @output += "\nHired #{applicant.email}"
         else
             @output += "\nFailed to decide for #{applicant.email}"
         end
+    end
+
+    def display_stats
+        stats = "\n"
+        @stages.each_with_index do |stage, i|
+            amount = self.applicants.where(stage: i).size
+            stats += "#{stage} #{amount} "
+        end
+        stats += "Hired #{self.applicants.where(hired: 1).size} Rejected #{self.applicants.where(hired: 0).size}"
+        @output += stats
     end
 end
