@@ -21,11 +21,11 @@ class Batch < ActiveRecord::Base
             
             case command[0]
             when "CREATE"
-                find_or_create_user(command[1])               
+                find_or_create_applicant(command[1])               
             when "ADVANCE"
-                advance_user(command[1], command[2])
+                advance_applicant(command[1], command[2])
             when "DECIDE"
-                decide_user(command[1], command[2])
+                decide_applicant(command[1], command[2])
             when "STATS"
                 display_stats
             else
@@ -60,7 +60,7 @@ class Batch < ActiveRecord::Base
         @commands.shift
     end
 
-    def find_or_create_user(email)
+    def find_or_create_applicant(email)
         if self.applicants.find_by(email: email)
             @output += "\nDuplicate applicant"
         else
@@ -69,7 +69,7 @@ class Batch < ActiveRecord::Base
         end
     end
 
-    def advance_user(email, stage = nil)
+    def advance_applicant(email, stage = nil)
         applicant = self.applicants.find_by(email: email)
         return_error if !applicant
         
@@ -86,8 +86,24 @@ class Batch < ActiveRecord::Base
                 @output += "\nAlready in #{@stages[applicant.stage]}"
             else
                 applicant.update_attributes(stage: applicant.stage + 1)
-                @output += "\nASDVANCE #{applicant.email}"
+                @output += "\nADVANCE #{applicant.email}"
             end
+        end
+
+    end
+
+    def decide_applicant(email, decision)
+        applicant = self.applicants.find_by(email: email)
+        return_error if !applicant
+
+        if decision == "0"
+            applicant.update_attributes(hired: 0)
+            @output += "\nRejected #{applicant.email}"
+        elsif decision == "1" && applicant.stage >= @stages.length - 1
+            applicant.update_attributes(hired: 1)
+            @output += "\nHired #{applicant.email}"
+        else
+            @output += "\nFailed to decide for #{applicant.email}"
         end
     end
 end
